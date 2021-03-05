@@ -1,7 +1,12 @@
 [package]
 name = "mmb-objdump"
 version = "0.1.0"
+readme = "README.md"
+repository = "https://github.com/trivial-rs/mmb-binutils"
 authors = ["Ivo C.S. Wingelaar <ivo@codeforge.rs>"]
+description = "Display information on Metamath Zero binary proof files"
+keywords = ["metamath-zero"]
+license = "MIT OR Apache-2.0"
 edition = "2018"
 
 [dependencies]
