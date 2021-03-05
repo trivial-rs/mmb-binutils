@@ -1,0 +1,8 @@
+[package]
+name = "mmb-objdump"
+version = "0.1.0"
+authors = ["Ivo C.S. Wingelaar <ivo@codeforge.rs>"]
+edition = "2018"
+
+[dependencies]
+clap = "2.33.3"
