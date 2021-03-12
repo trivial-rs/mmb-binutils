@@ -13,11 +13,20 @@ fn create_clap_app() -> App<'static, 'static> {
         )
 }
 
-fn main() {
+use anyhow::{Context, Result};
+use mmb_parser::Mmb;
+
+fn main() -> Result<()> {
     let app = create_clap_app();
     let matches = app.get_matches();
 
-    let x = matches.value_of("PATH").expect("required argument");
+    let path = matches.value_of("PATH").expect("required argument");
+    let data = std::fs::read(path)
+        .with_context(|| format!("Could not read binary proof file from \"{}\"", path))?;
 
-    println!("{}", x);
+    let mmb = Mmb::from(&data).unwrap();
+
+    println!("{}", mmb.version);
+
+    Ok(())
 }
