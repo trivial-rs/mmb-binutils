@@ -38,7 +38,7 @@ fn main() -> Result<()> {
 }
 
 fn print_offsets(mmb: &Mmb, range: &[u8], text: &str) {
-    let offset = range.as_ptr() as usize - mmb.file.as_ptr() as usize;
+    let offset = range.as_ptr() as usize - mmb.file().as_ptr() as usize;
 
     println!("{:16x} .. {:16x} {}", offset, offset + range.len(), text);
 }
@@ -47,25 +47,28 @@ fn handle(path: &Path, mmb: Mmb) -> Result<()> {
     println!(
         "{}: mmb version {} ({} bytes)\n",
         path.display(),
-        mmb.version,
-        mmb.file.len()
+        mmb.version(),
+        mmb.file().len()
     );
 
     println!("File header:");
-    println!("number of sorts: {}", mmb.num_sorts);
-    println!("number of terms and definitions: {}", mmb.num_terms);
-    println!("number of theorems and axioms: {}", mmb.num_theorems);
+    println!("number of sorts: {}", mmb.num_sorts());
+    println!("number of terms and definitions: {}", mmb.num_terms());
+    println!("number of theorems and axioms: {}", mmb.num_theorems());
 
     println!("");
     println!("           start ..              end");
 
-    print_offsets(&mmb, mmb.sorts, "sort table");
-    print_offsets(&mmb, mmb.terms, "term table");
-    print_offsets(&mmb, mmb.theorems, "theorem table");
-    print_offsets(&mmb, mmb.proofs, "proof section");
-    print_offsets(&mmb, mmb.sort_index, "sort index");
-    print_offsets(&mmb, mmb.term_index, "term index");
-    print_offsets(&mmb, mmb.theorem_index, "theorem index");
+    print_offsets(&mmb, mmb.sorts(), "sort table");
+    print_offsets(&mmb, mmb.terms(), "term table");
+    print_offsets(&mmb, mmb.theorems(), "theorem table");
+    print_offsets(&mmb, mmb.proofs(), "proof section");
+
+    if let Some(index) = &mmb.index() {
+        print_offsets(&mmb, index.sorts(), "sort index");
+        print_offsets(&mmb, index.terms(), "term index");
+        print_offsets(&mmb, index.theorems(), "theorem index");
+    }
 
     Ok(())
 }
